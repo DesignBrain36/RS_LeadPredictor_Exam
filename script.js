@@ -141,22 +141,22 @@ document.addEventListener('DOMContentLoaded', () => {
                      label: translations[currentLang].prospects,
                      data: prospectData,
                      backgroundColor: '#6b7a91',
-                     barPercentage: 0.8,
-                     categoryPercentage: 0.9,
+                     barPercentage: 0.9,
+                     categoryPercentage: 0.8,
                  },
                  {
                      label: translations[currentLang].leads,
                      data: leadData,
                      backgroundColor: '#8a99b2',
-                     barPercentage: 0.8,
-                     categoryPercentage: 0.9,
+                     barPercentage: 0.6,
+                     categoryPercentage: 0.8,
                  },
                  {
                      label: translations[currentLang].customers,
                      data: customerData,
                      backgroundColor: '#a6b4c9',
-                     barPercentage: 0.8,
-                     categoryPercentage: 0.9,
+                     barPercentage: 0.3,
+                     categoryPercentage: 0.8,
                  }
              ]
         };
@@ -211,10 +211,22 @@ document.addEventListener('DOMContentLoaded', () => {
                         tooltip: {
                             mode: 'index',
                             intersect: false,
+                            backgroundColor: 'rgba(96, 107, 130, 0.95)',
+                            titleFont: { size: 14, weight: 'normal', family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto' },
+                            bodyFont: { size: 14, family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto' },
+                            cornerRadius: 0,
+                            borderColor: '#d1d5db',
+                            borderWidth: 1,
+                            caretSize: 6,
+                            padding: 10,
+                            displayColors: false,
                             callbacks: {
                                 title: (context) => {
                                     return translations[currentLang].month + ' #' + context[0].label;
                                 },
+                                label: (context) => {
+                                    return context.dataset.label + ': ' + context.raw;
+                                }
                             }
                         }
                     }
