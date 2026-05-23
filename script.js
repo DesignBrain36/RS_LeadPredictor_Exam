@@ -82,34 +82,28 @@ document.addEventListener('DOMContentLoaded', () => {
         // Values
         const totalRevenue = parseFloat(totalRevenueInput.value) || 0;
         const avgOrderValue = parseFloat(avgOrderValueInput.value) || 1; // avoid / 0
-        const leadResponseRate = parseFloat(leadRateInput.value) / 100; // 0 to 1
-        const prospectResponseRate = parseFloat(prospectRateInput.value) / 100; // 0 to 1
+        const leadResponseRate = parseFloat(leadRateInput.value); 
+        const prospectResponseRate = parseFloat(prospectRateInput.value); 
 
-        leadRateValDisp.textContent = parseFloat(leadRateInput.value).toFixed(2) + '%';
-        prospectRateValDisp.textContent = parseFloat(prospectRateInput.value).toFixed(2) + '%';
+        leadRateValDisp.textContent = leadResponseRate.toFixed(2) + '%';
+        prospectRateValDisp.textContent = prospectResponseRate.toFixed(2) + '%';
 
-        // Math
-        // Customers = Revenue / Avg Order
-        const customersCount = Math.floor(totalRevenue / avgOrderValue);
+        // Formula 01: Customers = Revenue / Avg Order Value
+        const customersCount = Math.ceil(totalRevenue / avgOrderValue);
         
-        // Leads = Customers / Lead Rate
-        const leadsCount = leadResponseRate > 0 ? Math.floor(customersCount / leadResponseRate) : 0;
+        // Formula 02: Leads = Customers * 100 / Lead response rate
+        const leadsCount = leadResponseRate > 0 ? Math.ceil((customersCount * 100) / leadResponseRate) : 0;
         
-        // Prospects = Leads / Prospect Rate
-        const prospectsCount = prospectResponseRate > 0 ? Math.floor(leadsCount / prospectResponseRate) : 0;
+        // Formula 03: Prospects = Leads * 100 / Prospect response rate
+        const prospectsCount = prospectResponseRate > 0 ? Math.ceil((leadsCount * 100) / prospectResponseRate) : 0;
 
-        // Ensure Prospects >= Leads >= Customers
-        const adjCustomers = customersCount;
-        const adjLeads = Math.max(leadsCount, customersCount);
-        const adjProspects = Math.max(prospectsCount, adjLeads);
+        // UI Updates
+        prospectsValue.textContent = prospectsCount;
+        leadsValue.textContent = leadsCount;
+        customersValue.textContent = customersCount;
 
-        // Update UI
-        prospectsValue.textContent = adjProspects;
-        leadsValue.textContent = adjLeads;
-        customersValue.textContent = adjCustomers;
-
-        const leadsPrcnt = adjProspects > 0 ? (adjLeads / adjProspects) * 100 : 0;
-        const customersPrcnt = adjProspects > 0 ? (adjCustomers / adjProspects) * 100 : 0;
+        const leadsPrcnt = prospectsCount > 0 ? (leadsCount / prospectsCount) * 100 : 0;
+        const customersPrcnt = prospectsCount > 0 ? (customersCount / prospectsCount) * 100 : 0;
 
         leadsPercent.textContent = Math.round(leadsPrcnt) + '%';
         customersPercent.textContent = Math.round(customersPrcnt) + '%';
@@ -117,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
         leadsProgress.style.width = Math.min(leadsPrcnt, 100) + '%';
         customersProgress.style.width = Math.min(customersPrcnt, 100) + '%';
 
-        updateChart(adjProspects, adjLeads, adjCustomers);
+        updateChart(prospectsCount, leadsCount, customersCount);
     }
 
     function generateChartData(totProspects, totLeads, totCustomers, months = 6) {
