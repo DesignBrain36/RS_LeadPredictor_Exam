@@ -1,5 +1,60 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Translations
+    const translations = {
+        en: {
+            language: "Language",
+            currency: "Currency",
+            campaignStart: "Campaign Start",
+            campaignEnd: "Campaign End",
+            totalRevenue: "Total Revenue",
+            avgOrderValue: "Avg. Order Value",
+            prospects: "Prospects",
+            leads: "Leads",
+            customers: "Customers",
+            leadResponseRate: "Lead Response Rate",
+            prospectResponseRate: "Prospect Response Rate",
+            people: "people",
+            months: "Months",
+            month: "Month"
+        },
+        bg: {
+            language: "Език",
+            currency: "Валута",
+            campaignStart: "Начало на кампания",
+            campaignEnd: "Край на кампания",
+            totalRevenue: "Общи приходи",
+            avgOrderValue: "Ср. стойност на поръчка",
+            prospects: "Потенциални",
+            leads: "Лийдове",
+            customers: "Клиенти",
+            leadResponseRate: "Честота на отговор (Лийдове)",
+            prospectResponseRate: "Честота на отговор (Потенциални)",
+            people: "души",
+            months: "Месеци",
+            month: "Месец"
+        },
+        de: {
+            language: "Sprache",
+            currency: "Währung",
+            campaignStart: "Kampagnenstart",
+            campaignEnd: "Kampagnenende",
+            totalRevenue: "Gesamtumsatz",
+            avgOrderValue: "Durchschn. Bestellwert",
+            prospects: "Interessenten",
+            leads: "Leads",
+            customers: "Kunden",
+            leadResponseRate: "Lead-Antwortrate",
+            prospectResponseRate: "Interessenten-Antwortrate",
+            people: "Personen",
+            months: "Monate",
+            month: "Monat"
+        }
+    };
+
+    let currentLang = 'en';
+
     // Inputs
+    const languageSelect = document.getElementById('language');
     const totalRevenueInput = document.getElementById('total-revenue');
     const avgOrderValueInput = document.getElementById('avg-order-value');
     const leadRateInput = document.getElementById('lead-rate');
@@ -87,21 +142,21 @@ document.addEventListener('DOMContentLoaded', () => {
              labels: ['1', '2', '3', '4', '5', '6'],
              datasets: [
                  {
-                     label: 'Prospects',
+                     label: translations[currentLang].prospects,
                      data: prospectData,
                      backgroundColor: '#6b7a91',
                      barPercentage: 0.8,
                      categoryPercentage: 0.9,
                  },
                  {
-                     label: 'Leads',
+                     label: translations[currentLang].leads,
                      data: leadData,
                      backgroundColor: '#8a99b2',
                      barPercentage: 0.8,
                      categoryPercentage: 0.9,
                  },
                  {
-                     label: 'Customers',
+                     label: translations[currentLang].customers,
                      data: customerData,
                      backgroundColor: '#a6b4c9',
                      barPercentage: 0.8,
@@ -140,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             stacked: false, 
                             title: {
                                 display: true,
-                                text: 'people',
+                                text: translations[currentLang].people,
                                 padding: 0
                             },
                         },
@@ -148,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             stacked: false,
                             title: {
                                 display: true,
-                                text: 'Months',
+                                text: translations[currentLang].months,
                             },
                             reverse: false
                         }
@@ -162,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             intersect: false,
                             callbacks: {
                                 title: (context) => {
-                                    return 'Month #' + context[0].label;
+                                    return translations[currentLang].month + ' #' + context[0].label;
                                 },
                             }
                         }
@@ -173,6 +228,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Event listeners
+    languageSelect.addEventListener('change', (e) => {
+        currentLang = e.target.value;
+        const t = translations[currentLang];
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (t[key]) {
+                el.innerText = t[key];
+            }
+        });
+        
+        if (chartInstance) {
+            chartInstance.data.datasets[0].label = t.prospects;
+            chartInstance.data.datasets[1].label = t.leads;
+            chartInstance.data.datasets[2].label = t.customers;
+            chartInstance.options.scales.x.title.text = t.people;
+            chartInstance.options.scales.y.title.text = t.months;
+            chartInstance.update();
+        }
+    });
+
     [totalRevenueInput, avgOrderValueInput, leadRateInput, prospectRateInput].forEach(el => {
         el.addEventListener('input', calculate);
     });

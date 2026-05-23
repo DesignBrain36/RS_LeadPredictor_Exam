@@ -20,21 +20,23 @@
             </div>
             
             <div class="form-group">
-                <label>Language</label>
+                <label data-i18n="language">Language</label>
                 <select id="language">
                     <option value="en">🇺🇸 English</option>
+                    <option value="bg">🇧🇬 Bulgarian</option>
+                    <option value="de">🇩🇪 German</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label>Currency</label>
+                <label data-i18n="currency">Currency</label>
                 <select id="currency">
                     <option value="USD">$ US Dollar</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label>Campaign Start</label>
+                <label data-i18n="campaignStart">Campaign Start</label>
                 <div class="input-with-icon right">
                     <input type="date" id="campaign-start" value="2026-05-08">
                     <!-- <i class="far fa-calendar"></i> -->
@@ -42,7 +44,7 @@
             </div>
 
             <div class="form-group">
-                <label>Campaign End</label>
+                <label data-i18n="campaignEnd">Campaign End</label>
                 <div class="input-with-icon right">
                     <input type="date" id="campaign-end" value="2026-11-04">
                     <!-- <i class="far fa-calendar"></i> -->
@@ -50,7 +52,7 @@
             </div>
 
             <div class="form-group">
-                <label>Total Revenue</label>
+                <label data-i18n="totalRevenue">Total Revenue</label>
                 <div class="input-with-icon">
                     <span class="currency-symbol">$</span>
                     <input type="number" id="total-revenue" value="10000">
@@ -58,7 +60,7 @@
             </div>
 
             <div class="form-group">
-                <label>Avg. Order Value</label>
+                <label data-i18n="avgOrderValue">Avg. Order Value</label>
                 <div class="input-with-icon">
                     <span class="currency-symbol">$</span>
                     <input type="number" id="avg-order-value" value="1000">
@@ -78,7 +80,7 @@
                 <div class="stats-container">
                     <div class="stat-card panel">
                         <div class="stat-header">
-                            <div><i class="far fa-folder"></i> Prospects</div>
+                            <div><i class="far fa-folder"></i> <span data-i18n="prospects">Prospects</span></div>
                             <div class="stat-percent" id="prospects-percent">100%</div>
                         </div>
                         <div class="stat-value" id="prospects-value">125</div>
@@ -89,7 +91,7 @@
                     
                     <div class="stat-card panel">
                         <div class="stat-header">
-                            <div><i class="far fa-user"></i> Leads</div>
+                            <div><i class="far fa-user"></i> <span data-i18n="leads">Leads</span></div>
                             <div class="stat-percent" id="leads-percent">20%</div>
                         </div>
                         <div class="stat-value" id="leads-value">25</div>
@@ -100,7 +102,7 @@
 
                     <div class="stat-card panel">
                         <div class="stat-header">
-                            <div><i class="fas fa-trophy" style="color:#d1d5db"></i> Customers</div>
+                            <div><i class="fas fa-trophy" style="color:#d1d5db"></i> <span data-i18n="customers">Customers</span></div>
                             <div class="stat-percent" id="customers-percent">8%</div>
                         </div>
                         <div class="stat-value" id="customers-value">10</div>
@@ -114,7 +116,7 @@
             <div class="bottom-section panel">
                 <div class="slider-group">
                     <div class="slider-header">
-                        <label>Lead Response Rate</label>
+                        <label data-i18n="leadResponseRate">Lead Response Rate</label>
                     </div>
                     <div class="slider-container">
                          <input type="range" id="lead-rate" min="1" max="100" step="1" value="40">
@@ -126,7 +128,7 @@
 
                 <div class="slider-group">
                     <div class="slider-header">
-                        <label>Prospect Response Rate</label>
+                        <label data-i18n="prospectResponseRate">Prospect Response Rate</label>
                     </div>
                     <div class="slider-container">
                         <input type="range" id="prospect-rate" min="1" max="100" step="1" value="20">
