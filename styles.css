@@ -249,6 +249,165 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     color: var(--text-primary);
 }
 
+/* Custom Chart Styles */
+.custom-chart-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.custom-chart-main {
+    display: flex;
+    flex-grow: 1;
+    position: relative;
+    padding-left: 20px; /* Space for Y-axis title */
+}
+
+.custom-chart-y-title {
+    position: absolute;
+    left: -15px;
+    top: 50%;
+    transform: rotate(-90deg) translateX(-50%);
+    transform-origin: left center;
+}
+
+.custom-chart-y-axis {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding-right: 10px;
+}
+
+.custom-chart-y-label {
+    text-align: right;
+    width: 20px;
+}
+
+.custom-chart-grid {
+    flex-grow: 1;
+    position: relative;
+    border-left: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 10px 0;
+}
+
+.custom-chart-grid-x-lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+}
+
+.custom-chart-grid-x-line {
+    width: 1px;
+    height: 100%;
+    background-color: var(--border-color);
+}
+
+.custom-chart-row {
+    position: relative;
+    height: 12%; 
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.custom-chart-bar {
+    position: absolute;
+    left: 0;
+    border-radius: 0 4px 4px 0;
+    transition: width 0.3s ease;
+}
+
+.custom-chart-bar.prospects {
+    height: 100%;
+    background: linear-gradient(90deg, #a5b4cb, #889aa8);
+    z-index: 1;
+}
+
+.custom-chart-bar.leads {
+    height: 65%;
+    background: linear-gradient(90deg, #abbadd, #909bb4);
+    z-index: 2;
+}
+
+.custom-chart-bar.customers {
+    height: 35%;
+    background: linear-gradient(90deg, #ccd3e4, #b2b8c9);
+    z-index: 3;
+}
+
+.custom-chart-x-axis {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 50px;
+    margin-top: 10px;
+}
+
+.custom-chart-x-label {
+    transform: translateX(-50%);
+}
+
+.custom-chart-x-label:first-child {
+    transform: none;
+}
+
+/* Tooltip */
+.custom-chart-tooltip {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    background: rgba(96, 107, 130, 0.95);
+    border: 1px solid #d1d5db;
+    color: #fff;
+    padding: 10px;
+    border-radius: 4px;
+    pointer-events: none;
+    z-index: 10;
+    display: none;
+    font-size: 14px;
+    white-space: nowrap;
+    transform: translate(10px, -50%);
+}
+
+.custom-chart-row:hover .custom-chart-tooltip {
+    display: block;
+}
+
+/* Legend */
+.custom-chart-legend {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+}
+
+.c-prospects { background: #889aa8; }
+.c-leads { background: #909bb4; }
+.c-customers { background: #b2b8c9; }
+
 .slider-container {
     position: relative;
     padding-bottom: 15px;
