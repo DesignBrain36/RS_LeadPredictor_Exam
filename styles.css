@@ -263,15 +263,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     display: flex;
     flex-grow: 1;
     position: relative;
-    padding-left: 20px; /* Space for Y-axis title */
+    padding-left: 35px; /* Space for Y-axis title */
 }
 
 .custom-chart-y-title {
     position: absolute;
-    left: -15px;
+    left: 10px;
     top: 50%;
-    transform: rotate(-90deg) translateX(-50%);
-    transform-origin: left center;
+    transform: translateY(-50%) rotate(-90deg);
+    transform-origin: center;
 }
 
 .custom-chart-y-axis {
