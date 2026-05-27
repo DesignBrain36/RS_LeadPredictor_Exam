@@ -55,8 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Inputs
     const languageSelect = document.getElementById('language');
-    const currencySelect = document.getElementById('currency');
-    const currencySymbols = document.querySelectorAll('.currency-symbol');
     const totalRevenueInput = document.getElementById('total-revenue');
     const avgOrderValueInput = document.getElementById('avg-order-value');
     const leadRateInput = document.getElementById('lead-rate');
@@ -237,13 +235,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         
         calculate(); // Recalculate and re-render chart to update language labels
-    });
-
-    currencySelect.addEventListener('change', (e) => {
-        const symbol = e.target.value;
-        currencySymbols.forEach(el => {
-            el.innerText = symbol;
-        });
     });
 
     [totalRevenueInput, avgOrderValueInput, leadRateInput, prospectRateInput].forEach(el => {
