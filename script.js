@@ -76,8 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const leadRateValDisp = document.getElementById('lead-rate-val');
     const prospectRateValDisp = document.getElementById('prospect-rate-val');
 
-    let chartInstance = null;
-
     function calculate() {
         // Values
         const totalRevenue = parseFloat(totalRevenueInput.value) || 0;
@@ -114,125 +112,117 @@ document.addEventListener('DOMContentLoaded', () => {
         updateChart(prospectsCount, leadsCount, customersCount);
     }
 
-    function generateChartData(totProspects, totLeads, totCustomers, months = 6) {
-        // Simple linear distribution over 6 months
+    function updateChart(totProspects, totLeads, totCustomers) {
+        const container = document.getElementById('chart-panel');
+        container.innerHTML = ''; // clear previous
+
+        const months = 6;
         const prospectData = [];
         const leadData = [];
         const customerData = [];
         
-        // for making stacked horizontal bars like screenshot
         for(let i=1; i<=months; i++) {
-             // In the screenshot, larger lists are at the bottom (Month 6).
-             // Let's create an increasing pattern
              const ratio = i / months; 
-             prospectData.push(Math.round(totProspects * (ratio/3.5) * i)); // Just generating increasing values
+             prospectData.push(Math.round(totProspects * (ratio/3.5) * i));
              leadData.push(Math.round(totLeads * (ratio/3.5) * i));
              customerData.push(Math.round(totCustomers * (ratio/3.5) * i));
         }
 
-        // Based on the screenshot, Month 6 is lowest in chart visual, Month 1 is top
-        // Let's flip it so Month 1 is top but smaller.
-        // Actually screenshot: Month 6 has the biggest bar, Month 1 smallest.
-        
-        return {
-             labels: ['1', '2', '3', '4', '5', '6'],
-             datasets: [
-                 {
-                     label: translations[currentLang].prospects,
-                     data: prospectData,
-                     backgroundColor: '#6b7a91',
-                     barPercentage: 0.9,
-                     categoryPercentage: 0.8,
-                 },
-                 {
-                     label: translations[currentLang].leads,
-                     data: leadData,
-                     backgroundColor: '#8a99b2',
-                     barPercentage: 0.6,
-                     categoryPercentage: 0.8,
-                 },
-                 {
-                     label: translations[currentLang].customers,
-                     data: customerData,
-                     backgroundColor: '#a6b4c9',
-                     barPercentage: 0.3,
-                     categoryPercentage: 0.8,
-                 }
-             ]
-        };
-    }
+        const maxVal = Math.max(...prospectData, 10);
+        // We'll calculate nice x-axis ticks
+        const maxTick = Math.ceil(maxVal / 20) * 20;
 
-    function updateChart(prospects, leads, customers) {
-        const ctx = document.getElementById('predictionChart').getContext('2d');
-        
-        let data = generateChartData(prospects, leads, customers);
+        const wrapper = document.createElement('div');
+        wrapper.className = 'custom-chart-wrapper';
 
-        if (chartInstance) {
-            chartInstance.data = data;
-            chartInstance.update();
-        } else {
-            Chart.defaults.color = '#7d8a9e';
-            Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif';
+        const mainArea = document.createElement('div');
+        mainArea.className = 'custom-chart-main';
 
-            chartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: data,
-                options: {
-                    indexAxis: 'y',
-                    grouped: false, // Overlap the bars
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: {
-                        mode: 'index',
-                        intersect: false
-                    },
-                    scales: {
-                        x: {
-                            stacked: false, 
-                            title: {
-                                display: true,
-                                text: translations[currentLang].people,
-                                padding: 0
-                            },
-                        },
-                        y: {
-                            stacked: false,
-                            title: {
-                                display: true,
-                                text: translations[currentLang].months,
-                            },
-                            reverse: false
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            mode: 'index',
-                            intersect: false,
-                            backgroundColor: 'rgba(96, 107, 130, 0.95)',
-                            titleFont: { size: 14, weight: 'normal', family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto' },
-                            bodyFont: { size: 14, family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto' },
-                            cornerRadius: 0,
-                            borderColor: '#d1d5db',
-                            borderWidth: 1,
-                            caretSize: 6,
-                            padding: 10,
-                            displayColors: false,
-                            callbacks: {
-                                title: (context) => {
-                                    return translations[currentLang].month + ' #' + context[0].label;
-                                },
-                                label: (context) => {
-                                    return context.dataset.label + ': ' + context.raw;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
+        // Y Axis Title
+        const yTitle = document.createElement('div');
+        yTitle.className = 'custom-chart-y-title';
+        yTitle.innerText = translations[currentLang].months;
+        mainArea.appendChild(yTitle);
+
+        // Y Axis
+        const yAxis = document.createElement('div');
+        yAxis.className = 'custom-chart-y-axis';
+        for(let i=1; i<=months; i++) {
+            const yLabel = document.createElement('div');
+            yLabel.className = 'custom-chart-y-label';
+            yLabel.innerText = i;
+            yAxis.appendChild(yLabel);
         }
+        mainArea.appendChild(yAxis);
+
+        // Grid & Bars
+        const grid = document.createElement('div');
+        grid.className = 'custom-chart-grid';
+
+        // X Axis lines
+        const xLines = document.createElement('div');
+        xLines.className = 'custom-chart-grid-x-lines';
+        const steps = 6;
+        for(let i=0; i<=steps; i++) {
+            const line = document.createElement('div');
+            line.className = 'custom-chart-grid-x-line';
+            xLines.appendChild(line);
+        }
+        grid.appendChild(xLines);
+
+        // Rows
+        for(let i=0; i<months; i++) {
+            const row = document.createElement('div');
+            row.className = 'custom-chart-row';
+            
+            const wProspects = (prospectData[i] / maxTick) * 100;
+            const wLeads = (leadData[i] / maxTick) * 100;
+            const wCustomers = (customerData[i] / maxTick) * 100;
+
+            row.innerHTML = `
+                <div class="custom-chart-bar prospects" style="width: ${wProspects}%"></div>
+                <div class="custom-chart-bar leads" style="width: ${wLeads}%"></div>
+                <div class="custom-chart-bar customers" style="width: ${wCustomers}%"></div>
+                <div class="custom-chart-tooltip">
+                    ${translations[currentLang].month} #${i+1}<br/>
+                    ${translations[currentLang].prospects}: ${prospectData[i]}<br/>
+                    ${translations[currentLang].leads}: ${leadData[i]}<br/>
+                    ${translations[currentLang].customers}: ${customerData[i]}
+                </div>
+            `;
+            grid.appendChild(row);
+        }
+
+        mainArea.appendChild(grid);
+        wrapper.appendChild(mainArea);
+
+        // X Axis Labels
+        const xAxis = document.createElement('div');
+        xAxis.className = 'custom-chart-x-axis';
+        for(let i=0; i<=steps; i++) {
+            const val = Math.round((maxTick / steps) * i);
+            const xLabel = document.createElement('div');
+            xLabel.className = 'custom-chart-x-label';
+            if (i === 0) {
+                xLabel.innerText = "0 " + translations[currentLang].people;
+            } else {
+                xLabel.innerText = val + ' ' + translations[currentLang].people;
+            }
+            xAxis.appendChild(xLabel);
+        }
+        wrapper.appendChild(xAxis);
+
+        // Title/Legend
+        const legend = document.createElement('div');
+        legend.className = 'custom-chart-legend';
+        legend.innerHTML = `
+            <div class="legend-item"><div class="legend-color c-prospects"></div>${translations[currentLang].prospects}</div>
+            <div class="legend-item"><div class="legend-color c-leads"></div>${translations[currentLang].leads}</div>
+            <div class="legend-item"><div class="legend-color c-customers"></div>${translations[currentLang].customers}</div>
+        `;
+        wrapper.appendChild(legend);
+
+        container.appendChild(wrapper);
     }
 
     // Event listeners
@@ -246,14 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
         
-        if (chartInstance) {
-            chartInstance.data.datasets[0].label = t.prospects;
-            chartInstance.data.datasets[1].label = t.leads;
-            chartInstance.data.datasets[2].label = t.customers;
-            chartInstance.options.scales.x.title.text = t.people;
-            chartInstance.options.scales.y.title.text = t.months;
-            chartInstance.update();
-        }
+        calculate(); // Recalculate and re-render chart to update language labels
     });
 
     currencySelect.addEventListener('change', (e) => {
